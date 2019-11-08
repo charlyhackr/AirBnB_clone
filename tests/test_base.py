@@ -23,10 +23,6 @@ class BaseModelTestCase(unittest.TestCase):
         instance = BaseModel()
         self.assertIsInstance(instance.created_at, datetime)
 
-    @unittest.mock.patch('datetime.datetime',
-                         unittest.mock.Mock(
-                             now=lambda:
-                             datetime(1973, 3, 1, 0, 23, 2)))
     def test_created_at_is_a_valid_datetime(self):
         instance = BaseModel()
         self.assertEqual(datetime(1973, 3, 1, 0, 23, 2), instance.created_at)
@@ -35,10 +31,6 @@ class BaseModelTestCase(unittest.TestCase):
         instance = BaseModel()
         self.assertIsInstance(instance.updated_at, datetime)
 
-    @unittest.mock.patch('datetime.datetime',
-                         unittest.mock.Mock(
-                             now=lambda:
-                             datetime(1973, 3, 1, 0, 23, 2)))
     def test_updated_at_is_a_valid_datetime(self):
         instance = BaseModel()
         self.assertEqual(datetime(1973, 3, 1, 0, 23, 2), instance.updated_at)
@@ -46,3 +38,7 @@ class BaseModelTestCase(unittest.TestCase):
     def test_base_model_str_representation(self):
         instance = BaseModel()
         self.assertTrue("[BaseModel] ({}) {{".format(instance.id) in str(instance))
+
+    def  test_to_dic_type(self):
+         tipo_dict = BaseModel()
+         self.assertIsInstance(tipo_dict.to_dict(), dict)    
