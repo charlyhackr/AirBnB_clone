@@ -1,7 +1,6 @@
 import unittest
 import uuid
 from datetime import datetime
-import unittest.mock
 from models.base_model import BaseModel
 
 
