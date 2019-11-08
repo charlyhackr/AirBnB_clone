@@ -46,5 +46,4 @@ class BaseModelTestCase(unittest.TestCase):
 
     def test_base_model_str_representation(self):
         instance = BaseModel()
-        self.assertTrue("[BaseModel] ({}) {{".format(instance.id)
-                        in str(instance))
+        self.assertTrue("[BaseModel] ({}) {{".format(instance.id) in str(instance))
