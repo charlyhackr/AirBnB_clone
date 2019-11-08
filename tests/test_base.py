@@ -43,3 +43,8 @@ class BaseModelTestCase(unittest.TestCase):
     def test_updated_at_is_a_valid_datetime(self):
         instance = BaseModel()
         self.assertEqual(datetime(1973, 3, 1, 0, 23, 2), instance.updated_at)
+
+    def test_base_model_str_representation(self):
+        instance = BaseModel()
+        self.assertTrue("[BaseModel] ({}) {{".format(instance.id)
+                        in str(instance))

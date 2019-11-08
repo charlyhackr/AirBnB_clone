@@ -23,3 +23,7 @@ class BaseModel():
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
+
+    def __str__(self):
+        """ Returns the string representation of the object. """
+        return "[BaseModel] (" + self.id + ") " + str(self.__dict__)
