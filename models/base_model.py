@@ -28,3 +28,7 @@ class BaseModel():
     def __str__(self):
         """ Returns the string representation of the object. """
         return "[BaseModel] (" + self.id + ") " + str(self.__dict__)
+
+    def save(self):
+        """ Updates the instance update date. """
+        self.updated_at = datetime.now()

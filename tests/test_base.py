@@ -1,11 +1,11 @@
 import unittest
 import uuid
-from datetime import datetime
-import unittest.mock
+from datetime import datetime, date
 from models.base_model import BaseModel
 
 
 class BaseModelTestCase(unittest.TestCase):
+
     def test_instance(self):
         instance = BaseModel()
         self.assertIsInstance(instance, BaseModel)
@@ -24,26 +24,26 @@ class BaseModelTestCase(unittest.TestCase):
         instance = BaseModel()
         self.assertIsInstance(instance.created_at, datetime)
 
-    @unittest.mock.patch('datetime.datetime',
-                         unittest.mock.Mock(
-                             now=lambda:
-                             datetime(1973, 3, 1, 0, 23, 2)))
     def test_created_at_is_a_valid_datetime(self):
         instance = BaseModel()
-        self.assertEqual(datetime(1973, 3, 1, 0, 23, 2), instance.created_at)
+        self.assertTrue(date.today() == instance.created_at.date())
 
     def test_updated_at_is_a_datetime(self):
         instance = BaseModel()
         self.assertIsInstance(instance.updated_at, datetime)
 
-    @unittest.mock.patch('datetime.datetime',
-                         unittest.mock.Mock(
-                             now=lambda:
-                             datetime(1973, 3, 1, 0, 23, 2)))
     def test_updated_at_is_a_valid_datetime(self):
         instance = BaseModel()
-        self.assertEqual(datetime(1973, 3, 1, 0, 23, 2), instance.updated_at)
+        self.assertTrue(date.today() == instance.updated_at.date())
 
     def test_base_model_str_representation(self):
         instance = BaseModel()
-        self.assertTrue("[BaseModel] ({}) {{".format(instance.id) in str(instance))
+        self.assertTrue("[BaseModel] ({}) {{".format(instance.id)
+                        in str(instance))
+
+    def test_base_model_save(self):
+        instance = BaseModel()
+        self.assertTrue(date.today() == instance.updated_at.date())
+        prev_date = instance.updated_at
+        instance.save()
+        self.assertTrue(prev_date < instance.updated_at)
