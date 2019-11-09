@@ -47,3 +47,7 @@ class BaseModelTestCase(unittest.TestCase):
         prev_date = instance.updated_at
         instance.save()
         self.assertTrue(prev_date < instance.updated_at)
+
+    def test_to_dic_type(self):
+        tipo_dict = BaseModel()
+        self.assertIsInstance(tipo_dict.to_dict(), dict)
