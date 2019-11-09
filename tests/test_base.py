@@ -51,3 +51,7 @@ class BaseModelTestCase(unittest.TestCase):
     def test_to_dic_type(self):
         tipo_dict = BaseModel()
         self.assertIsInstance(tipo_dict.to_dict(), dict)
+
+    def test_to_dict_not_same(self):
+        not_same = BaseModel()
+        self.assertNotEqual(not_same.to_dict(), not_same.__dict__)
