@@ -32,3 +32,11 @@ class BaseModel():
     def save(self):
         """ Updates the instance update date. """
         self.updated_at = datetime.now()
+
+    def to_dict(self):
+        """ : returns a dictionary all keys/values of dict of the instance"""
+        ret_dict = self.__dict__.copy()
+        ret_dict["created_at"] = self.created_at.isoformat()
+        ret_dict["updated_at"] = self.updated_at.isoformat()
+        ret_dict["__class__"] = self.__class__.__name__
+        return ret_dict
