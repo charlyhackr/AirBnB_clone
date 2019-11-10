@@ -16,29 +16,26 @@ class FileStorage():
             file_path (str): File path of the JSON file containing all the
                 objects of the file storage.
     """
-
-    def __init__(self):
-        """ Initializes a FileStorage instance. """
-        self.__objects = {}
-        self.__file_path = "storage.json"
+    __objects = {}
+    __file_path = "storage.json"
 
     def all(self):
         """ Returns a dictionary with all the objects of the file storage. """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """ Adds a new object inside the file storage. """
-        self.__objects["{}.{}".format(obj.__class__.__name__,
-                                      obj.id)] = obj.to_dict()
+        FileStorage.__objects["{}.{}".format(obj.__class__.__name__,
+                                             obj.id)] = obj.to_dict()
 
     def save(self):
         """ Saves the JSON of all the objects into the JSON storage file. """
-        with open("storage.json", "w+") as f:
+        with open(FileStorage.__file_path, "w+", encoding="utf-8") as f:
             f.write(json.dumps(self.__objects))
 
     def reload(self):
         """ Reloads all its objects from the JSON storage file. """
         if (os.path.exists(self.__file_path) and
                 os.path.isfile(self.__file_path)):
-            with open("storage.json", "r") as f:
-                self.__objects = json.loads(f.read())
+            with open(FileStorage.__file_path, "r") as f:
+                FileStorage.__objects = json.loads(f.read())
