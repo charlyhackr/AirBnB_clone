@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Command Interprete for Airbnb Porject."""
 
+
 import cmd
 
 class HBHBCommand(cmd.Cmd):
@@ -9,13 +10,14 @@ class HBHBCommand(cmd.Cmd):
 
     def do_quit(self, args):
         """Exit to the program."""
-        return(True)
+        return True
 
     def do_EOF(self, arg):
         """EOF signal to exit the program."""
         print("")
-        return(True)
+        return True
 
+    
 if __name__ == '__main__':
     interprete = HBHBCommand()
     interprete.cmdloop()
