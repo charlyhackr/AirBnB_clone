@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from models import storage
 """
 base_model module, contains the BaseModel class
 """
@@ -43,6 +44,8 @@ class BaseModel():
                     pass
                 else:
                     setattr(self, key, val)
+        else:
+            storage.new(self)
 
     def __str__(self):
         """ Returns the string representation of the object. """
@@ -51,6 +54,8 @@ class BaseModel():
     def save(self):
         """ Updates the instance update date. """
         self.updated_at = datetime.now()
+        storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """ : returns a dictionary all keys/values of dict of the instance"""
