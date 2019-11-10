@@ -19,11 +19,21 @@ class BaseModel():
             instance.
     """
 
-    def __init__(self):
-        """ Initializes a BaseModel instance. """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+    def __init__(self, *args, **kwargs):
+       """ Initializes a BaseModel instance.
+           *args : Unused.
+           **kwargs {dict}: key/value pairs of attributes.
+       """
+       format = "%Y-%m-%dT%H:%M:%S.%f"
+       self.id = str(uuid.uuid4())
+       self.created_at = datetime.now()
+       self.updated_at = datetime.now()
+       if len(kwargs) != 0:
+           for key, val in kwargs.items():
+               if key == "created_at" or key == "updated_at":
+                   self.__dict__[key] = datetime.strptime(val, format)
+               else:
+                   self.__dict__[key] = val
 
     def __str__(self):
         """ Returns the string representation of the object. """
