@@ -24,16 +24,25 @@ class BaseModel():
            *args : Unused.
            **kwargs {dict}: key/value pairs of attributes.
         """
-        frmt = "%Y-%m-%dT%H:%M:%S.%f"
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        if not kwargs:
+
+        if kwargs:
             for key, val in kwargs.items():
                 if key in ("created_at", "updated_at"):
-                    self.__dict__[key] = datetime.strptime(val, frmt)
+                    if isinstance(val, datetime):
+                        setattr(self, key, val)
+                    elif isinstance(key, str):
+                        setattr(self,
+                                key,
+                                datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f"))
+                    else:
+                        pass
+                elif key == "__class__":
+                    pass
                 else:
-                    self.__dict__[key] = val
+                    setattr(self, key, val)
 
     def __str__(self):
         """ Returns the string representation of the object. """
