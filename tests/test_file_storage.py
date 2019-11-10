@@ -7,6 +7,10 @@ from models.engine.file_storage import FileStorage
 
 class FileStorageTest(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        os.remove("storage.json")
+
     def test_create_instance(self):
         instance = FileStorage()
         self.assertIsInstance(instance, FileStorage)
@@ -51,11 +55,15 @@ class FileStorageTest(unittest.TestCase):
         self.assertEqual(compare_dict, new_instance.all(), "wrong dictionary")
 
     def test_reload_from_nonexistent_file(self):
-        os.remove("storage.json")
         instance = FileStorage()
         instance.reload()
+        instance.save()
         self.assertEqual({}, instance.all())
 
-    @classmethod
-    def cleanUpClass(cls):
-        os.remove("storage.json")
+    def tearDown(self):
+        for attr in FileStorage.__dict__:
+            if "__objects" in attr:
+                setattr(FileStorage, attr, {})
+        if (os.path.exists("storage.json")
+                and os.path.isfile("storage.json")):
+            os.remove("storage.json")

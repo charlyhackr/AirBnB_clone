@@ -5,13 +5,13 @@ from models import storage
 from models.base_model import BaseModel
 
 
-class ExecutionTestCase(unittest.TestCase):
+class StorageTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        for attr in storage.__dict__:
+        for attr in storage.__class__.__dict__:
             if "__objects" in attr:
-                setattr(storage, attr, {})
+                setattr(storage.__class__, attr, {})
         if (os.path.exists("storage.json")
                 and os.path.isfile("storage.json")):
             os.remove("storage.json")
@@ -25,7 +25,7 @@ class ExecutionTestCase(unittest.TestCase):
     def test_storage_save_objects(self):
         instance_1 = BaseModel()
         instance_2 = BaseModel()
-        self.assertTrue(all("BaseModel." in x for x in storage.all().keys()))
+        self.assertTrue(all("BaseModel." in x for x in storage.all()))
 
     def test_storage_look_for_file(self):
         storage.save()
@@ -47,8 +47,10 @@ class ExecutionTestCase(unittest.TestCase):
         with open("storage.json", "r") as f:
             self.assertTrue("\"foo\": 42" in f.read())
 
-    def cleanUp(self):
-        for attr in storage.__dict__:
+    def tearDown(self):
+        for attr in storage.__class__.__dict__:
             if "__objects" in attr:
-                setattr(storage, attr, {})
-        os.remove("storage.json")
+                setattr(storage.__class__, attr, {})
+        if (os.path.exists("storage.json")
+                and os.path.isfile("storage.json")):
+            os.remove("storage.json")
