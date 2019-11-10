@@ -55,3 +55,58 @@ class BaseModelTestCase(unittest.TestCase):
     def test_to_dict_not_same(self):
         not_same = BaseModel()
         self.assertNotEqual(not_same.to_dict(), not_same.__dict__)
+
+    def test_create_instance_from_dict_of_a_previous_instance(self):
+        instance = BaseModel()
+        new_instance = BaseModel(instance.to_dict())
+        self.assertTrue(new_instance.id == instance.id
+                        and new_instance.created_at == instance.created_at
+                        and new_instance.updated_at == instance.updated_at)
+
+    def test_create_instance_with_kwargs(self):
+        instance = BaseModel(id=uuid.uuid4(),
+                             created_at=datetime.now(),
+                             updated_at=datetime.now())
+        test_uuid = uuid.UUID(instance.id, version=4)
+        self.assertTrue(test_uuid == instance.id
+                        and instance.created_at.date() == date.today()
+                        and instance.updated_at.date() == date.today())
+
+    def test_create_instance_with_additional_kwargs(self):
+        instance = BaseModel(id=uuid.uuid4(),
+                             created_at=datetime.now(),
+                             updated_at=datetime.now(),
+                             foo=42,
+                             bar='baz')
+
+        test_uuid = uuid.UUID(instance.id, version=4)
+        self.assertTrue(test_uuid == instance.id
+                        and instance.created_at.date() == date.today()
+                        and instance.updated_at.date() == date.today()
+                        and instance.foo == 42
+                        and instance.bar == "baz")
+
+    def test_create_instance_with_additional_kwargs_no_id_and_dates(self):
+        instance = BaseModel(foo=42,
+                             bar="baz")
+        self.assertTrue(hasattr(instance, 'id')
+                        and hasattr(instance, 'created_at')
+                        and hasattr(instance, 'updated_at'))
+
+        test_uuid = uuid.UUID(instance.id, version=4)
+        self.assertTrue(test_uuid == instance.id
+                        and instance.created_at.date() == date.today()
+                        and instance.updated_at.date() == date.today()
+                        and instance.foo == 42
+                        and instance.bar == "baz")
+
+    def test_create_instance_with_args(self):
+        instance = BaseModel("Foo", 'bar', 96)
+        self.assertTrue(hasattr(instance, 'id')
+                        and hasattr(instance, 'created_at')
+                        and hasattr(instance, 'updated_at'))
+
+        test_uuid = uuid.UUID(instance.id, version=4)
+        self.assertTrue(test_uuid == instance.id
+                        and instance.created_at.date() == date.today()
+                        and instance.updated_at.date() == date.today())
