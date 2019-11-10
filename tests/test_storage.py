@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""
+This file contains the test for test_storage
+"""
 import unittest
 import json
 import os

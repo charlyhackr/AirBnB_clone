@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""
+This file contains the test for the module BaseModel
+"""
 import unittest
 import uuid
 from datetime import datetime, date
