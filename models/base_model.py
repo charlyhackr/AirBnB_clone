@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+This module contains the BaseModel class for management
+the objects into python shell for project Airbnbn
+"""
 import uuid
 from datetime import datetime
 from models import storage
@@ -58,7 +63,7 @@ class BaseModel():
         storage.save()
 
     def to_dict(self):
-        """ : returns a dictionary all keys/values of dict of the instance"""
+        """ Returns a dictionary all keys/values of dict of the instance"""
         ret_dict = self.__dict__.copy()
         ret_dict["created_at"] = self.created_at.isoformat()
         ret_dict["updated_at"] = self.updated_at.isoformat()

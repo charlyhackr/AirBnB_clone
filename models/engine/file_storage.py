@@ -1,9 +1,9 @@
-import json
-import os
+#!/usr/bin/python3
 """
 File Storage class.
 """
-
+import json
+import os
 
 class FileStorage():
     """ Serializes class instances to JSON and deserializes in the other
