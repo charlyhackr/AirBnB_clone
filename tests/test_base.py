@@ -63,50 +63,42 @@ class BaseModelTestCase(unittest.TestCase):
         self.assertEqual(new_instance.created_at, instance.created_at)
         self.assertEqual(new_instance.updated_at, instance.updated_at)
 
-    def test_create_instance_with_kwargs(self):
-        instance = BaseModel(id=str(uuid.uuid4()),
-                             created_at=datetime.now(),
-                             updated_at=datetime.now())
+    def test_create_instance_with_kwarg_id_as_UUID_string(self):
+        instance = BaseModel(id=str(uuid.uuid4()))
         test_uuid = str(uuid.UUID(instance.id, version=4))
         self.assertEqual(test_uuid, instance.id)
-        self.assertEqual(instance.created_at.date(), date.today())
-        self.assertEqual(instance.updated_at.date(), date.today())
 
-    def test_create_instance_with_additional_kwargs(self):
+    def test_create_instance_with_kwarg_created_at_as_a_string(self):
+        instance = BaseModel(created_at="1973-03-01T00:32:04.12345")
+        self.assertEqual(instance.created_at,
+                         datetime(1973, 3, 1, 0, 32, 4, 123450))
+
+    def test_create_instance_with_kwarg_updated_at_as_a_string(self):
+        instance = BaseModel(updated_at="2000-10-02T00:32:04.12345")
+        self.assertEqual(instance.updated_at,
+                         datetime(2000, 10, 2, 0, 32, 4, 123450))
+
+    def test_create_instance_with_additional_kwarg(self):
         instance = BaseModel(id=str(uuid.uuid4()),
                              created_at=datetime.now(),
                              updated_at=datetime.now(),
-                             foo=42,
-                             bar='baz')
-
-        test_uuid = str(uuid.UUID(instance.id, version=4))
-        self.assertEqual(test_uuid, instance.id)
-        self.assertEqual(instance.created_at.date(), date.today())
-        self.assertEqual(instance.updated_at.date(), date.today())
-        self.assertEqual(instance.foo, 42)
-        self.assertEqual(instance.bar, "baz")
+                             foo=42)
+        self.assertEqual(hasattr(instance, "foo") and instance.foo, 42)
 
     def test_create_instance_with_additional_kwargs_no_id_and_dates(self):
-        instance = BaseModel(foo=42,
-                             bar="baz")
-        self.assertTrue(hasattr(instance, 'id'))
-        self.assertTrue(hasattr(instance, 'created_at'))
-        self.assertTrue(hasattr(instance, 'updated_at'))
+        instance = BaseModel(bar="baz")
+        self.assertTrue(hasattr(instance, 'id')
+                        and hasattr(instance, 'created_at')
+                        and hasattr(instance, 'updated_at'))
 
-        test_uuid = str(uuid.UUID(instance.id, version=4))
-        self.assertEqual(test_uuid, instance.id)
-        self.assertEqual(instance.created_at.date(), date.today())
-        self.assertEqual(instance.updated_at.date(), date.today())
-        self.assertEqual(instance.foo, 42)
-        self.assertEqual(instance.bar, "baz")
+        self.assertEqual(hasattr(instance, "bar") and instance.bar, "baz")
 
     def test_create_instance_with_args(self):
         instance = BaseModel("Foo", 'bar', 96)
-        self.assertTrue(hasattr(instance, 'id'))
-        self.assertTrue(hasattr(instance, 'created_at'))
-        self.assertTrue(hasattr(instance, 'updated_at'))
+        self.assertTrue(hasattr(instance, 'id')
+                        and hasattr(instance, 'created_at')
+                        and hasattr(instance, 'updated_at'))
 
-        test_uuid = str(uuid.UUID(instance.id, version=4))
-        self.assertEqual(test_uuid, instance.id)
-        self.assertEqual(instance.created_at.date(), date.today())
-        self.assertEqual(instance.updated_at.date(), date.today())
+    def test_instance_with_args_no_extra_attributes_are_created(self):
+        instance = BaseModel("Foo", 'bar', 96)
+        self.assertTrue(("foo", 'bar', 96) not in instance.__dict__.values())
