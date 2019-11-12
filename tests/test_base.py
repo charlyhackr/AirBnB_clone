@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 """
-This file contains the test for the module BaseModel
+This file contains the test for the BaseModel class
 """
 import unittest
 import uuid

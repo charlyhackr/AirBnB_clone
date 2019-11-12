@@ -4,6 +4,7 @@ This module contains the file storage class
 """
 import json
 import os
+from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -27,16 +28,26 @@ class FileStorage():
     def new(self, obj):
         """ Adds a new object inside the file storage. """
         FileStorage.__objects["{}.{}".format(obj.__class__.__name__,
-                                             obj.id)] = obj.to_dict()
+                                             obj.id)] = obj
 
     def save(self):
         """ Saves the JSON of all the objects into the JSON storage file. """
         with open(FileStorage.__file_path, "w+", encoding="utf-8") as f:
-            f.write(json.dumps(self.__objects))
+            f.write(json.dumps({key: value.to_dict() for (key, value) in
+                                FileStorage.__objects.items()}))
 
     def reload(self):
         """ Reloads all its objects from the JSON storage file. """
+
+        constructors = {"BaseModel": lambda values: BaseModel(**values)}
+
         if (os.path.exists(self.__file_path) and
                 os.path.isfile(self.__file_path)):
             with open(FileStorage.__file_path, "r") as f:
                 FileStorage.__objects = json.loads(f.read())
+
+            for key, value in FileStorage.__objects.items():
+                if '__class__' in value:
+                    if value['__class__'] in constructors:
+                        FileStorage.__objects[key] = constructors[
+                            value['__class__']](value)
