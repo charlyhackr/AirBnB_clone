@@ -10,8 +10,8 @@ class HBHBCommand(cmd.Cmd):
 
     def do_quit(self, args):
         """Exit to the program.
-           Args: 
-               args: argument for the command.   
+           Args:
+               args: argument for the command.
         """
         return True
 
@@ -24,8 +24,9 @@ class HBHBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """ An empty line doesn't execute anything. """   
-     pass
+        """ An empty line doesn't execute anything. """
+        pass
+
 
 if __name__ == '__main__':
     interprete = HBHBCommand()
