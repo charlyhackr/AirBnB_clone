@@ -5,10 +5,7 @@ the objects into python shell for project Airbnbn
 """
 import uuid
 from datetime import datetime
-from models import storage
-"""
-base_model module, contains the BaseModel class
-"""
+import models
 
 
 class BaseModel():
@@ -50,7 +47,7 @@ class BaseModel():
                 else:
                     setattr(self, key, val)
         else:
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """ Returns the string representation of the object. """
@@ -59,8 +56,8 @@ class BaseModel():
     def save(self):
         """ Updates the instance update date. """
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """ Returns a dictionary all keys/values of dict of the instance"""
