@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-File Storage class.
+This module contains the file storage class
 """
 import json
 import os
