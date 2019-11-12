@@ -9,14 +9,23 @@ class HBHBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def do_quit(self, args):
-        """Exit to the program."""
+        """Exit to the program.
+           Args: 
+               args: argument for the command.   
+        """
         return True
 
     def do_EOF(self, arg):
-        """EOF signal to exit the program."""
+        """EOF signal to exit the program.
+           Args:
+               args: argument for the command.
+        """
         print("")
         return True
 
+    def emptyline(self):
+        """ An empty line doesn't execute anything. """   
+     pass
 
 if __name__ == '__main__':
     interprete = HBHBCommand()
