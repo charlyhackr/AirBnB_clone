@@ -1,14 +1,10 @@
 #!/usr/bin/python3
 """
-This module contains the BaseModel class for management
-the objects into python shell for project Airbnbn
+This module contains the BaseModel class for management.
 """
 import uuid
 from datetime import datetime
 from models import storage
-"""
-base_model module, contains the BaseModel class
-"""
 
 
 class BaseModel():
