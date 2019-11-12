@@ -18,6 +18,11 @@ class FileStorageTest(unittest.TestCase):
         instance = FileStorage()
         self.assertIsInstance(instance, FileStorage)
 
+    def test_create_instance_with_args(self):
+        with (self.assertRaises(TypeError)) as context:
+            instance = FileStorage(1)
+        self.assertTrue("takes no parameters" in str(context.exception))
+
     def test_check_type_of_file_storage_objects(self):
         instance = FileStorage()
         self.assertIsInstance(instance.all(), dict)
@@ -35,6 +40,13 @@ class FileStorageTest(unittest.TestCase):
         instance.save()
         self.assertTrue(os.path.exists("storage.json") and
                         os.path.isfile("storage.json"))
+
+    def test_save_with_args(self):
+        instance = FileStorage()
+        with (self.assertRaises(TypeError)) as context:
+            instance.save(98)
+        self.assertTrue("save() takes 1 positional argument" in
+                        str(context.exception))
 
     def test_add_new_object_and_save_to_file(self):
         instance = FileStorage()
@@ -68,6 +80,13 @@ class FileStorageTest(unittest.TestCase):
         instance.reload()
         instance.save()
         self.assertEqual({}, instance.all())
+
+    def test_reload_with_args(self):
+        instance = FileStorage()
+        with (self.assertRaises(TypeError)) as context:
+            instance.reload(98)
+        self.assertTrue("reload() takes 1 positional argument" in
+                        str(context.exception))
 
     def tearDown(self):
         for attr in FileStorage.__dict__:
