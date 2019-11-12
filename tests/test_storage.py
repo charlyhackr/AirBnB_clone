@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 """
-This file contains the test for test_storage
+This file contains the test for the `storage` `FileStorage` global instance
 """
 import unittest
 import json
@@ -41,8 +40,11 @@ class StorageTestCase(unittest.TestCase):
         instance_2 = BaseModel()
         storage.save()
         with open("storage.json", "r") as f:
-            compare_dict = json.loads(f.read())
-        self.assertEqual(storage.all(), compare_dict)
+            from_json = json.loads(f.read())
+            all_instances = {key: value.to_dict()
+                             for (key, value) in storage.all().items()}
+
+        self.assertEqual(all_instances, from_json)
 
     def test_storage_update_object(self):
         instance = BaseModel()

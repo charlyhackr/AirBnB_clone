@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 """
-This file contains the tests for file storage
+This file contains the tests for the FileStorage class
 """
 import unittest
 import os
@@ -27,7 +26,7 @@ class FileStorageTest(unittest.TestCase):
         instance = FileStorage()
         obj = BaseModel()
         instance.new(obj)
-        self.assertIn(obj.to_dict(),
+        self.assertIn(obj,
                       instance.all().values(),
                       "object isn't in file storage")
 
@@ -43,8 +42,11 @@ class FileStorageTest(unittest.TestCase):
         instance.new(BaseModel())
         instance.save()
         with open("storage.json", "r") as f:
-            compare_dict = json.loads(f.read())
-        self.assertEqual(compare_dict, instance.all(), "wrong dictionary")
+            from_json = json.loads(f.read())
+            all_instances = {key: value.to_dict()
+                             for (key, value) in instance.all().items()}
+
+        self.assertEqual(from_json, all_instances, "wrong dictionary")
 
     def test_reload_from_file(self):
         instance = FileStorage()
@@ -55,8 +57,11 @@ class FileStorageTest(unittest.TestCase):
         new_instance = FileStorage()
         new_instance.reload()
         with open("storage.json", "r") as f:
-            compare_dict = json.loads(f.read())
-        self.assertEqual(compare_dict, new_instance.all(), "wrong dictionary")
+            from_json = json.loads(f.read())
+            all_instances = {key: value.to_dict()
+                             for (key, value) in new_instance.all().items()}
+
+        self.assertEqual(from_json, all_instances, "wrong dictionary")
 
     def test_reload_from_nonexistent_file(self):
         instance = FileStorage()
