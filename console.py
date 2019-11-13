@@ -127,6 +127,10 @@ class HBHBCommand(cmd.Cmd):
                         return
             print("** no instance found **")
 
+    def emptyline(self):
+        """An empty line doesnt execute anything. """
+        pass
+
 
 if __name__ == '__main__':
     interprete = HBHBCommand()
