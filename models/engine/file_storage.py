@@ -6,6 +6,11 @@ import json
 import os
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage():
@@ -21,6 +26,15 @@ class FileStorage():
     """
     __objects = {}
     __file_path = "storage.json"
+    __classes = {
+        "BaseModel": lambda values: BaseModel(**values),
+        "User": lambda values: User(**values),
+        "State": lambda values: State(**values),
+        "City": lambda values: City(**values),
+        "Amenity": lambda values: Amenity(**values),
+        "Place": lambda values: Place(**values),
+        "Review": lambda values: Review(**values)
+    }
 
     def all(self):
         """ Returns a dictionary with all the objects of the file storage. """
@@ -40,9 +54,6 @@ class FileStorage():
     def reload(self):
         """ Reloads all its objects from the JSON storage file. """
 
-        constructors = {"BaseModel": lambda values: BaseModel(**values),
-                        "User": lambda values: User(**values)}
-
         if (os.path.exists(self.__file_path) and
                 os.path.isfile(self.__file_path)):
             with open(FileStorage.__file_path, "r") as f:
@@ -50,6 +61,6 @@ class FileStorage():
 
             for key, value in FileStorage.__objects.items():
                 if '__class__' in value:
-                    if value['__class__'] in constructors:
-                        FileStorage.__objects[key] = constructors[
+                    if value['__class__'] in FileStorage.__classes:
+                        FileStorage.__objects[key] = FileStorage.__classes[
                             value['__class__']](value)
