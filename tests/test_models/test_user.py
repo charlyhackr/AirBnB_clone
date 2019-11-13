@@ -1,6 +1,5 @@
-"""
-Test cases for the User class
-"""
+#!/usr/bin/python3
+"""Test cases for the User class.x"""
 import unittest
 import uuid
 import os
