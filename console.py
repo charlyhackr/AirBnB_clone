@@ -140,7 +140,7 @@ class HBHBCommand(cmd.Cmd):
                         return
                     setattr(obj,
                             args[2],
-                            type(getattr(obj, args[2]))(args[3]))
+                            type(getattr(obj, args[2], ""))(args[3]))
                     models.storage.save()
                     return
             print("** no instance found **")
