@@ -5,10 +5,16 @@ from models.base_model import BaseModel
 
 
 class User(BaseModel):
+    """ Defines an user.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
-        self.email = ""
-        self.password = ""
-        self.first_name = ""
-        self.last_name = ""
+    Class attributes:
+        email (str): user email
+        password (str): user password
+        first_name (str): user first name
+        last_name (str): user last name
+    """
+
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""

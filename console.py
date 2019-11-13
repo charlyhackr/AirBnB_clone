@@ -27,6 +27,12 @@ class HBHBCommand(cmd.Cmd):
         "Review"
     }
 
+    __restricted_attrs = (
+        "created_at",
+        "updated_at",
+        "id"
+    )
+
     def do_quit(self, args):
         """Exit to the program.
            Args:
@@ -122,24 +128,25 @@ class HBHBCommand(cmd.Cmd):
         else:
             models.storage.reload()
             current_objs = models.storage.all()
-            for ins, obj in current_objs.items():
+            for _, obj in current_objs.items():
                 if obj.id == args[1] and obj.__class__.__name__ == args[0]:
                     if len(args) == 2:
                         print("** attribute name missing **")
                         return
-                    elif len(args) == 3:
+                    if len(args) == 3:
                         print("** value missing **")
                         return
-                    else:
-                        new_arg = args[3]
-                        setattr(obj, arg[2], arg[3])
-                        models.storage.save()
+                    if args[2] in HBHBCommand.__restricted_attrs:
                         return
+                    setattr(obj,
+                            args[2],
+                            type(getattr(obj, args[2]))(args[3]))
+                    models.storage.save()
+                    return
             print("** no instance found **")
 
     def emptyline(self):
         """ An empty line doesn't execute anything. """
-        pass
 
 
 if __name__ == '__main__':
