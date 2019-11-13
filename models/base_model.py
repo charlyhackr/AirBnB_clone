@@ -50,7 +50,9 @@ class BaseModel():
 
     def __str__(self):
         """ Returns the string representation of the object. """
-        return "[BaseModel] (" + self.id + ") " + str(self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                     self.id,
+                                     self.to_dict())
 
     def save(self):
         """ Updates the instance update date. """
