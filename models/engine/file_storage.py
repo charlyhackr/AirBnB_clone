@@ -5,6 +5,7 @@ This module contains the file storage class
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage():
@@ -39,7 +40,8 @@ class FileStorage():
     def reload(self):
         """ Reloads all its objects from the JSON storage file. """
 
-        constructors = {"BaseModel": lambda values: BaseModel(**values)}
+        constructors = {"BaseModel": lambda values: BaseModel(**values),
+                        "User": lambda values: User(**values)}
 
         if (os.path.exists(self.__file_path) and
                 os.path.isfile(self.__file_path)):
