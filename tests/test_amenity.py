@@ -10,11 +10,11 @@ import os
 class Test_State(unittest.TestCase):
     """"Class State -Unittest """
 
-    def test_setUp(self):
+    def setUp(self):
         """SetUps tests"""
         pass
 
-    def test_tearDown(self):
+    def tearDown(self):
         """"Restart tests"""
         try:
             os.remove("file.json")
