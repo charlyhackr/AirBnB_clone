@@ -1,6 +1,5 @@
-"""
-This file contains the tests for the FileStorage class
-"""
+#!/usr/bin/python3
+"""This file contains the tests for the FileStorage class."""
 import unittest
 import os
 import json
@@ -23,7 +22,7 @@ class FileStorageTest(unittest.TestCase):
     def test_create_instance_with_args(self):
         with (self.assertRaises(TypeError)) as context:
             instance = FileStorage(1)
-        self.assertTrue("takes no parameters" in str(context.exception))
+        self.assertIsNotNone("takes no parameters" in str(context.exception))
 
     def test_check_type_of_file_storage_objects(self):
         instance = FileStorage()
