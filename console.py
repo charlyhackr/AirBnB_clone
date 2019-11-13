@@ -5,6 +5,7 @@ import cmd
 import shlex
 import models
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBHBCommand(cmd.Cmd):
@@ -20,6 +21,12 @@ class HBHBCommand(cmd.Cmd):
         "Amenity",
         "Review"
     }
+
+    __restricted_attrs = (
+        "created_at",
+        "updated_at",
+        "id"
+    )
 
     def do_quit(self, args):
         """Exit to the program.
@@ -116,26 +123,25 @@ class HBHBCommand(cmd.Cmd):
         else:
             models.storage.reload()
             current_objs = models.storage.all()
-            for ins, obj in current_objs.items():
+            for _, obj in current_objs.items():
                 if obj.id == args[1] and obj.__class__.__name__ == args[0]:
                     if len(args) == 2:
                         print("** attribute name missing **")
                         return
-                    elif len(args) == 3:
+                    if len(args) == 3:
                         print("** value missing **")
                         return
-                    else:
-                        new_arg = args[3]
-                        if hasattr(obj, str(args[2])):
-                            new_arg = (type(obj.__dict__[args[2]]))(args[3])
-                        obj.__dict__[args[2]] = new_arg
-                        models.storage.save()
+                    if args[2] in HBHBCommand.__restricted_attrs:
                         return
+                    setattr(obj,
+                            args[2],
+                            type(getattr(obj, args[2]))(args[3]))
+                    models.storage.save()
+                    return
             print("** no instance found **")
 
     def emptyline(self):
         """ An empty line doesn't execute anything. """
-        pass
 
 
 if __name__ == '__main__':
