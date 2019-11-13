@@ -4,6 +4,7 @@
 import cmd
 import shlex
 import models
+from models.base_model import BaseModel
 
 
 class HBHBCommand(cmd.Cmd):
@@ -78,8 +79,6 @@ class HBHBCommand(cmd.Cmd):
                     return
             print("** no instance found **")
 
-   
-
     def do_all(self, args):
         """Command to print the string representation of all instances."""
         args = shlex.split(args)
@@ -98,6 +97,35 @@ class HBHBCommand(cmd.Cmd):
                 if obj.__class__.__name__ == args[0]:
                     new_list.append(obj.__str__())
             print(new_list)
+
+    def do_update(self, args):
+        """Updates an instance based on the class name and id."""
+        args = shlex.split(args)
+        if args == []:
+            print("** class name missing **")
+        elif args[0] not in HBHBCommand.__classes:
+            print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        else:
+            models.storage.reload()
+            current_objs = models.storage.all()
+            for ins, obj in current_objs.items():
+                if obj.id == args[1] and obj.__class__.__name__ == args[0]:
+                    if len(args) == 2:
+                        print("** attribute name missing **")
+                        return
+                    elif len(args) == 3:
+                        print("** value missing **")
+                        return
+                    else:
+                        new_arg = args[3]
+                        if hasattr(obj, str(args[2])):
+                            new_arg = (type(obj.__dict__[args[2]]))(args[3])
+                        obj.__dict__[args[2]] = new_arg
+                        models.storage.save()
+                        return
+            print("** no instance found **")
 
 
 if __name__ == '__main__':
