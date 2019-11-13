@@ -6,6 +6,11 @@ import shlex
 import models
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.city import City
+from models.review import Review
+from models.amenity import Amenity
+from models.state import State
 
 
 class HBHBCommand(cmd.Cmd):
@@ -127,9 +132,7 @@ class HBHBCommand(cmd.Cmd):
                         return
                     else:
                         new_arg = args[3]
-                        if hasattr(obj, str(args[2])):
-                            new_arg = (type(obj.__dict__[args[2]]))(args[3])
-                        obj.__dict__[args[2]] = new_arg
+                        setattr(obj, arg[2], arg[3])
                         models.storage.save()
                         return
             print("** no instance found **")
@@ -140,5 +143,5 @@ class HBHBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    interprete = HBHBCommand()
-    interprete.cmdloop()
+    interpreter = HBHBCommand()
+    interpreter.cmdloop()
