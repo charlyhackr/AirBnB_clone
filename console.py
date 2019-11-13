@@ -3,6 +3,7 @@
 
 import cmd
 import shlex
+import re
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -17,7 +18,7 @@ class HBHBCommand(cmd.Cmd):
     """ Class for command."""
     prompt = "(hbnb) "
 
-    __classes = {
+    __classes = (
         "BaseModel",
         "User",
         "State",
@@ -25,13 +26,32 @@ class HBHBCommand(cmd.Cmd):
         "Place",
         "Amenity",
         "Review"
-    }
+    )
 
     __restricted_attrs = (
         "created_at",
         "updated_at",
         "id"
     )
+
+    __operations = (
+        "all",
+        "count"
+    )
+
+    __args_operations = (
+        "update",
+        "destroy"
+    )
+
+    def default(self, line):
+        for c in HBHBCommand.__classes:
+            for o in HBHBCommand.__operations:
+                if re.search(r'^%s\.%s\(\)' % (c, o), line):
+                    if o == "all":
+                        self.do_all(c)
+                    elif o == "count":
+                        self.count(c)
 
     def do_quit(self, args):
         """Exit to the program.
@@ -144,6 +164,15 @@ class HBHBCommand(cmd.Cmd):
                     models.storage.save()
                     return
             print("** no instance found **")
+
+    def count(self, cls):
+        count = 0
+
+        for _, o in models.storage.all().items():
+            if o.__class__.__name__ == cls:
+                count += 1
+
+        print(count)
 
     def emptyline(self):
         """ An empty line doesn't execute anything. """
