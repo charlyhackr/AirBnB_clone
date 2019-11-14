@@ -56,15 +56,27 @@ class HBHBCommand(cmd.Cmd):
 
         for c in HBHBCommand.__classes:
             for o in HBHBCommand.__args_operations:
-                if re.search(r'^%s\.%s\(".*"\)' % (c, o), line):
-                    arg = re.findall(r'^%s\.%s\("(.*)"\)' % (c, o), line)[0]
-                    if arg:
-                        if o == "show":
-                            self.do_show("{} {}".format(c, arg))
-                        elif o == "destroy":
-                            self.do_destroy("{} {}".format(c, arg))
-                        elif o == "update":
-                            self.do_update(arg)
+                if re.search(r'^%s\.%s\(.*\)' % (c, o), line):
+                    args = re.findall(r'^%s\.%s\((.*)\)' % (c, o), line)[0]
+                    if args:
+                        if args[0] and args[-1] == '"':
+                            if o == "show":
+                                args = args.strip('"')
+                                self.do_show("{} {}".format(c, args))
+                            elif o == "destroy":
+                                args = args.strip('"')
+                                self.do_destroy("{} {}".format(c, args))
+                            elif o == "update":
+                                args = args.split(", ")
+                                if len(args) == 3:
+                                    args[0:2] = [s.strip(", \"")
+                                                 for s in args[0:2]]
+                                    print(args)
+                                    self.do_update(
+                                        "{} {} {} {}".format(c,
+                                                             args[0],
+                                                             args[1],
+                                                             args[2]))
 
     def do_quit(self, args):
         """Exit to the program.
@@ -163,6 +175,7 @@ class HBHBCommand(cmd.Cmd):
             current_objs = models.storage.all()
             for _, obj in current_objs.items():
                 if obj.id == args[1] and obj.__class__.__name__ == args[0]:
+
                     if len(args) == 2:
                         print("** attribute name missing **")
                         return
@@ -171,6 +184,16 @@ class HBHBCommand(cmd.Cmd):
                         return
                     if args[2] in HBHBCommand.__restricted_attrs:
                         return
+
+                    if args[3][0] and args[3][-1] != '"':
+                        try:
+                            args[3] = int(args[3])
+                        except ValueError:
+                            try:
+                                args[3] = float(args[3])
+                            except ValueError:
+                                pass
+
                     setattr(obj,
                             args[2],
                             type(getattr(obj, args[2], ""))(args[3]))
