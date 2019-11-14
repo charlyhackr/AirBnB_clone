@@ -77,7 +77,6 @@ class HBHBCommand(cmd.Cmd):
                                                          args[1],
                                                          args[2]))
                             elif len(args) == 2:
-                                print(args)
                                 if (args[1][0] == "{"
                                         and args[1][-1] == "}"):
                                     args[1] = args[1].replace("'", "\"")
