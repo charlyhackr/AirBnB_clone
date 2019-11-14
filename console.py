@@ -20,31 +20,31 @@ class HBHBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     __classes = (
-            "BaseModel",
-            "User",
-            "State",
-            "City",
-            "Place",
-            "Amenity",
-            "Review"
-            )
+        "BaseModel",
+        "User",
+        "State",
+        "City",
+        "Place",
+        "Amenity",
+        "Review"
+    )
 
     __restricted_attrs = (
-            "created_at",
-            "updated_at",
-            "id"
-            )
+        "created_at",
+        "updated_at",
+        "id"
+    )
 
     __operations = (
-            "all",
-            "count"
-            )
+        "all",
+        "count"
+    )
 
     __args_operations = (
-            "show",
-            "update",
-            "destroy"
-            )
+        "show",
+        "update",
+        "destroy"
+    )
 
     def default(self, line):
         for c in HBHBCommand.__classes:
