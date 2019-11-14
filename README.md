@@ -7,12 +7,13 @@
 
 ---
 
+Clone website of AirBnB, as a required project of the Holberton School Foundations curriculum.
 
-This is the first step towards building your first full web application: the AirBnB clone. This first step is very important because you will use what you build during this project with all other following projects: HTML/CSS templating, database storage, API, front-end integration…
+As of today, this repository contains the command line feature, used for administration purposes.
 
-### What is a command interpreter?
+### The command interpreter
 
-Do you remember the Shell? It’s exactly the same but limited to a specific use-case. In our case, we want to be able to manage the objects of our project:
+The command interpreter is currently capable of:
 
 - Create a new object (ex: a new User or a new Place)
 - Retrieve an object from a file, a database etc…
@@ -95,11 +96,6 @@ File Name | Description
 `tests/test_models/` | Unittests for BaseModel, User, amenity, city, place, review, and state
 `tests/test_models/test_engine/` | Unittest for file storage
 
-### Example Usage
-```python3
-
-
-```
 ### Environment
 * Language: Python3
 * OS: Ubuntu 14.04 LTS
