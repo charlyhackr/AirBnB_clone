@@ -40,6 +40,7 @@ class HBHBCommand(cmd.Cmd):
     )
 
     __args_operations = (
+        "show",
         "update",
         "destroy"
     )
@@ -52,6 +53,18 @@ class HBHBCommand(cmd.Cmd):
                         self.do_all(c)
                     elif o == "count":
                         self.count(c)
+
+        for c in HBHBCommand.__classes:
+            for o in HBHBCommand.__args_operations:
+                if re.search(r'^%s\.%s\(".*"\)' % (c, o), line):
+                    arg = re.findall(r'^%s\.%s\("(.*)"\)' % (c, o), line)[0]
+                    if arg:
+                        if o == "show":
+                            self.do_show("{} {}".format(c, arg))
+                        elif o == "destroy":
+                            self.do_destroy("{} {}".format(c, arg))
+                        elif o == "update":
+                            self.do_update(arg)
 
     def do_quit(self, args):
         """Exit to the program.
