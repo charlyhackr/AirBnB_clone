@@ -7,7 +7,6 @@
 
 ---
 
-
 Clone website of AirBnB, as a required project of the Holberton School Foundations curriculum.
 
 As of today, this repository contains the command line feature, used for administration purposes.

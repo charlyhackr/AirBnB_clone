@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 This file contains the test for the `storage` `FileStorage` global instance
 """
