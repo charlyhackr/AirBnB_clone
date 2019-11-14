@@ -4,6 +4,7 @@
 import cmd
 import shlex
 import re
+import json
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -19,31 +20,31 @@ class HBHBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     __classes = (
-        "BaseModel",
-        "User",
-        "State",
-        "City",
-        "Place",
-        "Amenity",
-        "Review"
-    )
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+            )
 
     __restricted_attrs = (
-        "created_at",
-        "updated_at",
-        "id"
-    )
+            "created_at",
+            "updated_at",
+            "id"
+            )
 
     __operations = (
-        "all",
-        "count"
-    )
+            "all",
+            "count"
+            )
 
     __args_operations = (
-        "show",
-        "update",
-        "destroy"
-    )
+            "show",
+            "update",
+            "destroy"
+            )
 
     def default(self, line):
         for c in HBHBCommand.__classes:
@@ -59,24 +60,31 @@ class HBHBCommand(cmd.Cmd):
                 if re.search(r'^%s\.%s\(.*\)' % (c, o), line):
                     args = re.findall(r'^%s\.%s\((.*)\)' % (c, o), line)[0]
                     if args:
-                        if args[0] and args[-1] == '"':
-                            if o == "show":
-                                args = args.strip('"')
-                                self.do_show("{} {}".format(c, args))
-                            elif o == "destroy":
-                                args = args.strip('"')
-                                self.do_destroy("{} {}".format(c, args))
-                            elif o == "update":
-                                args = args.split(", ")
-                                if len(args) == 3:
-                                    args[0:2] = [s.strip(", \"")
-                                                 for s in args[0:2]]
-                                    print(args)
-                                    self.do_update(
-                                        "{} {} {} {}".format(c,
-                                                             args[0],
-                                                             args[1],
-                                                             args[2]))
+                        if o == "show":
+                            args = args.strip('"')
+                            self.do_show("{} {}".format(c, args))
+                        elif o == "destroy":
+                            args = args.strip('"')
+                            self.do_destroy("{} {}".format(c, args))
+                        elif o == "update":
+                            args = args.split(", ")
+                            if len(args) == 3:
+                                args[0:2] = [s.strip(", \"")
+                                             for s in args[0:2]]
+                                self.do_update(
+                                    "{} {} {} {}".format(c,
+                                                         args[0],
+                                                         args[1],
+                                                         args[2]))
+                            elif len(args) == 2:
+                                print(args)
+                                if (args[1][0] == "{"
+                                        and args[1][-1] == "}"):
+                                    args[1] = args[1].replace("'", "\"")
+                                    args[1] = json.loads(args[1])
+                                    args[0] = args[0].strip(", \"")
+                                    self.update_with_dict(args[0], args[1])
+
 
     def do_quit(self, args):
         """Exit to the program.
@@ -196,10 +204,25 @@ class HBHBCommand(cmd.Cmd):
 
                     setattr(obj,
                             args[2],
-                            type(getattr(obj, args[2], ""))(args[3]))
+                            type(getattr(obj, args[2], args[3]))(args[3]))
                     models.storage.save()
                     return
             print("** no instance found **")
+
+    def update_with_dict(self, id, dic):
+        """Updates an instance based on the class name and id."""
+        models.storage.reload()
+        current_objs = models.storage.all()
+        for _, obj in current_objs.items():
+            if obj.id == id:
+                for k, v in dic.items():
+                    if k not in HBHBCommand.__restricted_attrs:
+                        setattr(obj,
+                                k,
+                                type(getattr(obj, k, v))(v))
+                models.storage.save()
+                return
+        print("** no instance found **")
 
     def count(self, cls):
         count = 0
