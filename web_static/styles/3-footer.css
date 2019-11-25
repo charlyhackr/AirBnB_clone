@@ -1,0 +1,16 @@
+/*
+ * ====Footer style for 3-index.html ====
+ */
+
+/* Footer style */
+footer {
+    background-color: #fff;
+    align-items: center;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    position: absolute;
+    width: 100%
+}

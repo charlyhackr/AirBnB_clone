@@ -1,0 +1,15 @@
+/*
+ * ==== Footer style for 2-index.html ====
+ */
+
+/* Footer style */
+footer {
+    background-color: #0f0;
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    position: absolute;
+    width: 100%;
+}
